@@ -4,6 +4,12 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.7 (2018-08-16)
+
+* Set message when track ends.
+* Change random track to shuffle play.
+* Minor refactoring.
+
 v0.1.6 (2018-08-05)
 
 * Minor refactoring.

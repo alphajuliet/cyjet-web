@@ -1,5 +1,5 @@
 // main.js
-// AJ 2018-05-06 
+// created by Andrew 2018-05-06 
 
 var R, audiojs, Plyr;  // Prevent syntax warnings from missing definitions
 var player;
@@ -10,8 +10,8 @@ const Cyjet = (() => {
   const Info = {
     title: "cyjet : :",
     author: "AndrewJ",
-    version: "0.1.6",
-    date: "2018-08-05",
+    version: "0.1.7",
+    date: "2018-08-16",
     info: "Cyjet music site",
     appendTitleTo: (tagName) => {
       $(tagName).append($(`<span class="title"><span id="cy">cy</span><span id="jet">jet</span> : :</span>`));
@@ -33,6 +33,9 @@ const Cyjet = (() => {
   const renderPlayerTo = (target) => {
     $(target).append($('<audio id="player"></audio>'));
     player = new Plyr('#player', { 'autoplay': false, 'muted': true });
+    player.on('ended', event => {
+      message('click on a track to play');
+    });
     message('click on a track to play');
   };
 
@@ -42,7 +45,6 @@ const Cyjet = (() => {
   // @@TODO: memoize it across multiple calls
   
   const withTrackDataDo = (fn) => {
-    //const trackData = 'https://cdn.glitch.com/bb8fd41a-7273-407d-b0cc-93cf1c0fa0a0%2Ftracks.json?1532773145678';
     const trackData = 'https://alphajuliet.com/music/cyjet/tracks.json';
     fetch(trackData, { "mode": "cors" })
       .then(response => response.json())
@@ -72,7 +74,6 @@ const Cyjet = (() => {
 
     // Load a new source
     const track = resolveTrackInfo(t);
-    console.log(track);
     message("loading track...");
     player.source = {
       type: 'audio',
@@ -83,13 +84,12 @@ const Cyjet = (() => {
       }],
     };
     
-    player.muted = true; // get around the Webkit autoplay issue
+    player.muted = true; // kinda get around the Webkit autoplay issue
     player.play() // returns a Promise in some browsers
       .then(() => {
         player.muted = false;
         message(`${ track.title } by ${ track.artist }`);
-        console.log(`Playing: ${ track.title } at ${ track.uri }`);
-        // console.log(track);
+        console.log(`Playing: ${ track.title }`);
       })
       .catch((err) => {
         message(`error :: cannot play ${ track.title } → ${err}`);
@@ -109,29 +109,29 @@ const Cyjet = (() => {
     
     withTrackDataDo(playFn);
   };
-  
+
   // -------------------
-  // Shuffle all tracks and play
-  // @@TODO Unfinished
-  
-  const shuffleAllTracks = () => {
-    
-    // Fisher-Yates/Knuth algorithm
-    const shuffle = (array) => {
-      let currentIndex = array.length, temporaryValue, randomIndex;
-      while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-      }
-      return array;
-    };
-    
-    // @@Todo
-  }
-  
+  // Shuffle play until stopped
+
+  var randomPlay = false; // state
+
+  const shufflePlay = () => {
+    randomPlay = (randomPlay == true) ? false : true;
+    console.log(`randomPlay is ${randomPlay}`);
+
+    if (randomPlay == true) {
+      player.on('ended', playRandomTrack);
+      playRandomTrack();
+    }
+    else {
+      player.on('ended', event => {
+        message('click on a track to play');
+      });
+      player.stop();
+      message('click on a track to play');
+    }
+  };
+
   // -------------------
   // Render each track to the target
   // This is a reducing function! (target → track → target)
@@ -177,9 +177,18 @@ const Cyjet = (() => {
   
   const renderControlsTo = (target) => {
     const container = $(target).append($('<div id="controls"></div>'));
-    $(container).append($('<button>random track</button></div>'))
-      .click(() => playRandomTrack());
 
+    const button1 = $('<button>random track</button>')
+      .click(playRandomTrack);
+
+    const button2 = $('<button id="shuffle">shuffle play</button>')
+      .click(() => {
+        shufflePlay();
+        $('#shuffle').toggleClass("buttonOn");
+      });
+
+    // $(container).append(button1);
+    $(container).append(button2);
     $(target).append(container);
     return target;
   }

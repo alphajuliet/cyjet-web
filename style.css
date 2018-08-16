@@ -137,10 +137,11 @@ body {
 button {
   border: 1px solid #666666;
   border-radius: 8pt;
-  background-color: #536;
   color: #8cf;
+  background-color: #536;
   font-size: 90%;
   padding: 2pt 12pt;
+  margin-right: 8pt;
   cursor: pointer;
 }
 
@@ -150,5 +151,9 @@ button:hover {
   transition-duration: 1s;
 }
 
+button.buttonOn {
+  color: #536;
+  background-color: yellow;
+}
 
 /* The End */
