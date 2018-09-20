@@ -10,11 +10,11 @@ const Cyjet = (() => {
   const Info = {
     title: "cyjet : :",
     author: "AndrewJ",
-    version: "0.1.7",
-    date: "2018-08-16",
+    version: "0.1.8",
+    date: "2018-09-20",
     info: "Cyjet music site",
     appendTitleTo: (tagName) => {
-      $(tagName).append($(`<span class="title"><span id="cy">cy</span><span id="jet">jet</span> : :</span>`));
+      $(tagName).append($(`<span class="title"><span id="cy">cy</span><span id="jet">jet</span></span>`));
       return tagName;
     },
     appendVersionDateTo: (tagName) => {
@@ -154,7 +154,7 @@ const Cyjet = (() => {
     const groupByProp = R.groupBy(R.prop('year'));
 
     R.forEachObjIndexed( (tracks, year) => {
-      const container1 = $(`<div class="year"><span class="year-title">${ year } :&nbsp;:&nbsp;</span></div>`);  // Create a div for each year
+      const container1 = $(`<div class="year"><span class="year-title">${ year }</span></div>`);  // Create a div for each year
       const container2 = $(`<div class="year-tracks"></div>`);
       
       R.reduce(renderTrack, container2, tracks); // ooh! FP lightblub moment.
