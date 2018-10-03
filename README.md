@@ -4,6 +4,17 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.9 (2018-10-03)
+
+* Collect track play and shuffle events.
+* Remove Monserrat font because of loading issues.
+
+v0.1.8 (2018-09-20)
+
+* Change main font to Montserrat.
+* Modified colours and gradients.
+* Remove double colons.
+
 v0.1.7 (2018-08-16)
 
 * Set message when track ends.
