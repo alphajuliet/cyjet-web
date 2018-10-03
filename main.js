@@ -1,7 +1,7 @@
 // main.js
 // created by Andrew 2018-05-06 
 
-var R, audiojs, Plyr;  // Prevent syntax warnings from missing definitions
+var R, audiojs, Plyr, ga;  // Prevent syntax warnings from missing definitions
 var player;
 
 const Cyjet = (() => {
@@ -10,8 +10,8 @@ const Cyjet = (() => {
   const Info = {
     title: "cyjet : :",
     author: "AndrewJ",
-    version: "0.1.8",
-    date: "2018-09-20",
+    version: "0.1.9",
+    date: "2018-10-03",
     info: "Cyjet music site",
     appendTitleTo: (tagName) => {
       $(tagName).append($(`<span class="title"><span id="cy">cy</span><span id="jet">jet</span></span>`));
@@ -55,6 +55,28 @@ const Cyjet = (() => {
   
   const isPublicTrack = (t) => (t.public == 'checked') || (t.public == true);
 
+  // Collect analytics
+  
+  const logPlay = (track) => {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Music',
+      eventAction: 'play',
+      eventLabel: track.title
+    });
+    console.log(`Event: play ${track.title}`);
+  }
+  
+  const logShuffle = (ev) => {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Music',
+      eventAction: 'shuffle',
+      eventLabel: ev
+    });
+    console.log(`Event: shuffle ${ev}`);
+  }
+
   // -------------------
   // Play a track through the player
   
@@ -89,7 +111,7 @@ const Cyjet = (() => {
       .then(() => {
         player.muted = false;
         message(`${ track.title } by ${ track.artist }`);
-        console.log(`Playing: ${ track.title }`);
+        logPlay(track);
       })
       .catch((err) => {
         message(`error :: cannot play ${ track.title } → ${err}`);
@@ -117,13 +139,14 @@ const Cyjet = (() => {
 
   const shufflePlay = () => {
     randomPlay = (randomPlay == true) ? false : true;
-    console.log(`randomPlay is ${randomPlay}`);
 
     if (randomPlay == true) {
+      logShuffle('start');
       player.on('ended', playRandomTrack);
       playRandomTrack();
     }
     else {
+      logShuffle('stop');
       player.on('ended', event => {
         message('click on a track to play');
       });
