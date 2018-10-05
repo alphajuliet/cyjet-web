@@ -4,6 +4,10 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.10 (2018-10-05)
+
+* Change font and theme colours to blue-grey.
+
 v0.1.9 (2018-10-03)
 
 * Collect track play and shuffle events.
