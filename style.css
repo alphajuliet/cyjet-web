@@ -2,6 +2,12 @@
  * Page CSS definitions 
  */
 
+:root {
+  --main-bg-colour: #444;
+  --text-colour: #7bf;
+  --alt-text-colour: #f99;
+}
+
 body {
   /* margin: 2em 2em; */
   margin-left: auto;
@@ -9,8 +15,8 @@ body {
   max-width: 900px;
   font-family: Catamaran, Avenir, Roboto, Helvetica, Arial, sans-serif;
   font-size: 12pt;
-  background-color: #333333;
-  background-image: linear-gradient(to right, #222, #000);
+  background-color: #445;
+  /* background-image: linear-gradient(to right, #222, #000); */
   color: #eeeeee;
 }
 
@@ -20,28 +26,28 @@ body {
 }
 
 .header .title {
-  font-family: "Josefin Sans";
+  font-family: "Unica One";
   font-weight: lighter;
   font-size: 100pt;
-  letter-spacing: -16pt;
+  letter-spacing: 8pt;
   color: #7bf;
   text-shadow: 5px 5px 5px #111;
 }
 
 #cy {
-  padding-right: 2pt;
+  /* padding-right: 2pt; */
 }
 
 #jet {
-  color: #222;
   /* background-color: #7bf; */
-  background-image: linear-gradient(to right, #7bf, #59d);
-  border-radius: 8pt;
-  padding-top: 0pt;
-  padding-left: 0pt;
-  padding-right: 12pt;
-  text-shadow: none;
-  box-shadow: 5px 5px 5px #111;
+  /* color: #222; */
+  /* background-image: linear-gradient(to right, #7bf, #59d); */
+  /* border-radius: 8pt; */
+  /* padding-top: 0pt; */
+  /* padding-left: 0pt; */
+  /* padding-right: 12pt; */
+  /* text-shadow: none; */
+  /* box-shadow: 5px 5px 5px #111; */
 }
 
 #logo {
@@ -70,24 +76,24 @@ body {
 .year {
   display: flex;
   justify-content: flex-start;
-  color: #c66;
-  background-color: #536;
-  background-image: linear-gradient(to right, #647, #314);
+  background-color: #668;
+  /* background-image: linear-gradient(to right, #647, #314); */
   border-radius: 4pt;
   margin: 15pt 0pt;
   padding: 5pt 5pt;
 }
 
 .year:hover {
-  background-color: #969; 
+  background-color: #669; 
   transition: all;
   transition-duration: 1s;
 }
 
 .year-title {
-  font-family: Helvetica, sans-serif;
+  font-family: Unica One, Helvectica, sans-serif;
   font-size: 150%;  
   font-weight: bold;
+  color: #f66;
   min-width: 80px;
   padding: -10pt 0pt;
 }
@@ -101,9 +107,9 @@ body {
 
 /* Track styling */
 .track-title {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Catamaran, Avenir, Helvetica, Arial, sans-serif;
   font-size: 100%;
-  color: #8cf;
+  color: #9ef;
   border-radius: 2pt;
   text-decoration: none;
   display: inline;
@@ -112,11 +118,11 @@ body {
 }
 
 .track-title:nth-child(even) {
-  color: #8bf; 
+  color: #9cf; 
 }
 
 .track-title:hover {
-  color: yellow; 
+  color: #f66; 
   transition: all;
   transition-duration: 1s;
 }
@@ -143,7 +149,7 @@ button {
   border: 1px solid #666666;
   border-radius: 8pt;
   color: #8cf;
-  background-color: #536;
+  background-color: #667;
   font-size: 90%;
   padding: 2pt 12pt;
   margin-right: 8pt;
@@ -151,14 +157,14 @@ button {
 }
 
 button:hover {
-  color: yellow; 
+  color: #f66; 
   transition: all;
   transition-duration: 1s;
 }
 
 button.buttonOn {
   color: #536;
-  background-color: yellow;
+  background-color: #f66;
 }
 
 /* The End */
