@@ -4,11 +4,21 @@
 var R, audiojs, Plyr, ga;  // Prevent syntax warnings from missing definitions
 var player;
 
+//-------------------
+// Make a chainable append
+
+jQuery.fn.extend({
+  append_: function (item) {
+    this.append(item);
+    return this;
+  }
+});
+
+//-------------------
 const Cyjet = (() => {
     
-  // -------------------
   const Info = {
-    title: "cyjet : :",
+    title: "cyjet",
     author: "AndrewJ",
     version: "0.1.10",
     date: "2018-10-05",
@@ -26,8 +36,8 @@ const Cyjet = (() => {
   const message = txt => {
     $('#message').html(txt); 
   }
-  
-  // -------------------
+
+  //-------------------
   // Render the audio player
 
   const renderPlayerTo = (target) => {
@@ -39,10 +49,9 @@ const Cyjet = (() => {
     message('click on a track to play');
   };
 
-  // -------------------
+  //-------------------
   // Get track data and apply a function to it
   // Use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to retrieve.
-  // @@TODO: memoize it across multiple calls
   
   const withTrackDataDo = (fn) => {
     const trackData = 'https://alphajuliet.com/music/cyjet/tracks.json';
@@ -51,10 +60,10 @@ const Cyjet = (() => {
       .then(json => { fn(json); });
   };
   
-  // -------------------
-  
+  //-------------------
   const isPublicTrack = (t) => (t.public == 'checked') || (t.public == true);
 
+  //-------------------
   // Collect analytics
   
   const logPlay = (track) => {
@@ -77,13 +86,13 @@ const Cyjet = (() => {
     console.log(`Event: shuffle ${ev}`);
   }
 
-  // -------------------
+  //-------------------
   // Play a track through the player
   
   const playTrack = (t) => {
 
     // Resolve the location of the track
-    var resolveTrackInfo = (track) => {
+    const resolveTrackInfo = (track) => {
       let t = R.clone(track);
       const baseUri = 'https://alphajuliet.com/music/cyjet';
       t.uri = `${ baseUri }/${ t.year }/${ t.mp3_fname }`;
@@ -128,7 +137,6 @@ const Cyjet = (() => {
     const playFn = R.compose(playTrack,
                              randomElement, 
                              R.filter(isPublicTrack));
-    
     withTrackDataDo(playFn);
   };
 
@@ -161,32 +169,27 @@ const Cyjet = (() => {
   // renderTrack :: jQuery -> Object -> jQuery
   
   const renderTrack = R.curry((target, track) => {
-    //if ((track.public == 'checked') || (track.public == true)) {
-      $(target).append(
-        $(`<span class="track-title" title="Original artist: ${ track.artist }">${ track.title }</span>`)
-          .click(() => playTrack(track)));
-    //}
-    return target;
+    return $(target).append_(
+      $(`<span class="track-title" title="Original artist: ${ track.artist }">${ track.title }</span>`)
+      .click(() => playTrack(track)));
   });
-  
+
   // Render all tracks by year. Also a reducing function.
   // renderByYear :: jQuery -> Object -> jQuery
   
   const renderByPropTo = R.curry((target, corpus) => {
-    const sortByTitle = (a, b) => (a < b);
-    const groupByProp = R.groupBy(R.prop('year'));
+    const groupByYear = R.groupBy(R.prop('year'));
+    const sortByTitle = R.sortBy(R.prop('title'));
 
     R.forEachObjIndexed( (tracks, year) => {
-      const container1 = $(`<div class="year"><span class="year-title">${ year }</span></div>`);  // Create a div for each year
+      const container1 = $(`<div class="year"><span class="year-title">${ year }</span></div>`);
       const container2 = $(`<div class="year-tracks"></div>`);
-      
+
       R.reduce(renderTrack, container2, tracks); // ooh! FP lightblub moment.
-      
+
       $(container1).append(container2);
       $(target).append(container1);
-    }, groupByProp(R.compose(R.sortBy(R.prop('title')), 
-                             R.filter(isPublicTrack))
-                   (corpus)));
+    }, (R.compose(groupByYear, sortByTitle, R.filter(isPublicTrack)))(corpus));
     return target;
   });
   
@@ -201,19 +204,15 @@ const Cyjet = (() => {
   const renderControlsTo = (target) => {
     const container = $(target).append($('<div id="controls"></div>'));
 
-    const button1 = $('<button>random track</button>')
-      .click(playRandomTrack);
-
-    const button2 = $('<button id="shuffle">shuffle play</button>')
+    const buttonShuffle = $('<button id="shuffle">shuffle play</button>')
       .click(() => {
         shufflePlay();
         $('#shuffle').toggleClass("buttonOn");
       });
 
-    // $(container).append(button1);
-    $(container).append(button2);
-    $(target).append(container);
-    return target;
+    return $(target)
+      .append_(container)
+      .append_(buttonShuffle);
   }
   
   // -------------------
