@@ -54,10 +54,13 @@ const Cyjet = (() => {
   // Use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to retrieve.
   
   const withTrackDataDo = (fn) => {
-    const trackData = 'https://alphajuliet.com/music/cyjet/tracks.json';
+    // const trackData = 'https://alphajuliet.com/music/cyjet/tracks.json'
+    const trackData = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet/tracks.json'
     fetch(trackData, { "mode": "cors" })
       .then(response => response.json())
-      .then(json => { fn(json); });
+      .catch(err => console.error(err.message)) 
+      .then(json => { fn(json); })
+      .catch(err => console.error(err.message)) 
   };
   
   //-------------------
