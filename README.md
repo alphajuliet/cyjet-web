@@ -4,6 +4,10 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.11 (2018-11-30)
+
+* Migrate mp3 files to AWS S3.
+
 v0.1.10 (2018-10-05)
 
 * Change font and theme colours to blue-grey.
