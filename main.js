@@ -54,15 +54,18 @@ const Cyjet = (() => {
   // Use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to retrieve.
   
   const withTrackDataDo = (fn) => {
-    // const trackData = 'https://alphajuliet.com/music/cyjet/tracks.json'
     const trackData = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet/tracks.json'
-    fetch(trackData, { "mode": "cors" })
+    // const trackData = 'https://api.airtable.com/v0/appHZHDQXtw3tTsoh/Tracks'
+    fetch(trackData, { 
+      "mode": "cors", 
+      // "headers": { "Authorization": "Bearer keyYTARsl9MgJrZWw" } 
+    })
       .then(response => response.json())
       .catch(err => console.error(err.message)) 
       .then(json => { fn(json); })
       .catch(err => console.error(err.message)) 
   };
-  
+
   //-------------------
   const isPublicTrack = (t) => (t.public == 'checked') || (t.public == true);
 
@@ -75,8 +78,8 @@ const Cyjet = (() => {
       eventCategory: 'Music',
       eventAction: 'play',
       eventLabel: track.title
-    });
-    console.log(`Event: play ${track.title}`);
+    })
+    console.log(`Event: play ${track.title}`)
   }
   
   const logShuffle = (ev) => {
@@ -85,8 +88,8 @@ const Cyjet = (() => {
       eventCategory: 'Music',
       eventAction: 'shuffle',
       eventLabel: ev
-    });
-    console.log(`Event: shuffle ${ev}`);
+    })
+    console.log(`Event: shuffle ${ev}`)
   }
 
   //-------------------
@@ -96,14 +99,14 @@ const Cyjet = (() => {
 
     // Resolve the location of the track
     const resolveTrackInfo = (track) => {
-      let t = R.clone(track);
-      const baseUri = 'https://alphajuliet.com/music/cyjet';
-      t.uri = `${ baseUri }/${ t.year }/${ t.mp3_fname }`;
-      return t;
+      let t = R.clone(track)
+      const baseUri = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet'
+      t.uri = `${ baseUri }/${ t.year }/${ t.mp3_fname }`
+      return t
     }
     
     if (player.playing == true || player.paused == true) {
-      player.stop();
+      player.stop()
     }
 
     // Load a new source
@@ -116,20 +119,20 @@ const Cyjet = (() => {
         src: track.uri,
         type: 'audio/mp3',
       }],
-    };
+    }
     
     player.muted = true; // kinda get around the Webkit autoplay issue
-    player.play() // returns a Promise in some browsers
+    player.play()
       .then(() => {
         player.muted = false;
-        message(`${ track.title } by ${ track.artist }`);
-        logPlay(track);
+        message(`${ track.title } by ${ track.artist }`)
+        logPlay(track)
       })
-      .catch((err) => {
-        message(`error :: cannot play ${ track.title } → ${err}`);
-        console.log(`Error playing ${ track.title } → ${err}`);
+      .catch(err => {
+        message(`error :: cannot play ${ track.title } → ${err}`)
+        console.log(`Error playing ${ track.title } → ${err}`)
       });
-  };
+  }
   
   // -------------------
   // Play a random track
@@ -174,7 +177,7 @@ const Cyjet = (() => {
   const renderTrack = R.curry((target, track) => {
     return $(target).append_(
       $(`<span class="track-title" title="Original artist: ${ track.artist }">${ track.title }</span>`)
-      .click(() => playTrack(track)));
+        .click(() => playTrack(track)));
   });
 
   // Render all tracks by year. Also a reducing function.
