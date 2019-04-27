@@ -4,6 +4,10 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.12 (2019-04-27)
+
+* Add Creative Commons licence to main page.
+
 v0.1.11 (2018-11-30)
 
 * Migrate mp3 files to AWS S3.
