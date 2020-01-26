@@ -58,13 +58,12 @@ const Cyjet = (() => {
     // const trackData = 'https://api.airtable.com/v0/appHZHDQXtw3tTsoh/Tracks'
     fetch(trackData, { 
       "mode": "cors", 
-      // "headers": { "Authorization": "Bearer keyYTARsl9MgJrZWw" } 
     })
       .then(response => response.json())
       .catch(err => console.error(err.message)) 
       .then(json => { fn(json); })
       .catch(err => console.error(err.message)) 
-  };
+  }
 
   //-------------------
   const isPublicTrack = (t) => (t.public == 'checked') || (t.public == true);
@@ -180,16 +179,17 @@ const Cyjet = (() => {
         .click(() => playTrack(track)));
   });
 
-  // Render all tracks by year. Also a reducing function.
+  // Render all tracks by a nominated key. Also a reducing function.
   // renderByYear :: jQuery -> Object -> jQuery
   
   const renderByPropTo = R.curry((target, corpus) => {
     const groupByYear = R.groupBy(R.prop('year'));
+    // const groupByBpm = R.groupBy(R.prop('bpm'));
     const sortByTitle = R.sortBy(R.prop('title'));
 
     R.forEachObjIndexed( (tracks, year) => {
-      const container1 = $(`<div class="year"><span class="year-title">${ year }</span></div>`);
-      const container2 = $(`<div class="year-tracks"></div>`);
+      const container1 = $(`<div class="box"><span class="box-title">${ year }</span></div>`);
+      const container2 = $(`<div class="box-tracks"></div>`);
 
       R.reduce(renderTrack, container2, tracks); // ooh! FP lightblub moment.
 

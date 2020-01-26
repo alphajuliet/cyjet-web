@@ -78,7 +78,7 @@ a {
   padding: 6pt 0pt;
 }
 
-.year {
+.box {
   display: flex;
   justify-content: flex-start;
   background-color: #668;
@@ -88,14 +88,14 @@ a {
   padding: 5pt 5pt;
 }
 
-.year:hover {
+.box:hover {
   background-color: #669; 
   transition: all;
   transition-duration: 1s;
 }
 
-.year-title {
-  font-family: Unica One, Helvectica, sans-serif;
+.box-title {
+  font-family: Unica One, Helvetica, sans-serif;
   font-size: 150%;  
   font-weight: bold;
   color: #f66;
@@ -103,7 +103,7 @@ a {
   padding: -10pt 0pt;
 }
 
-.year-tracks {
+.box-tracks {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
