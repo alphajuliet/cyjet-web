@@ -20,8 +20,8 @@ const Cyjet = (() => {
   const Info = {
     title: "cyjet",
     author: "AndrewJ",
-    version: "0.1.12",
-    date: "2019-04-27",
+    version: "0.1.13",
+    date: "2020-02-29",
     info: "Cyjet music site",
     appendTitleTo: (tagName) => {
       $(tagName).append($(`<span class="title"><span id="cy">(cy</span><span id="jet">jet)</span></span>`));
@@ -174,8 +174,9 @@ const Cyjet = (() => {
   // renderTrack :: jQuery -> Object -> jQuery
   
   const renderTrack = R.curry((target, track) => {
+    const class_rating = track.rating >= 1 ? "star" : ""
     return $(target).append_(
-      $(`<span class="track-title" title="Original artist: ${ track.artist }">${ track.title }</span>`)
+      $(`<span class="track-title ${class_rating}" title="Original artist: ${ track.artist }">${ track.title }</span>`)
         .click(() => playTrack(track)));
   });
 
@@ -184,7 +185,6 @@ const Cyjet = (() => {
   
   const renderByPropTo = R.curry((target, corpus) => {
     const groupByYear = R.groupBy(R.prop('year'));
-    // const groupByBpm = R.groupBy(R.prop('bpm'));
     const sortByTitle = R.sortBy(R.prop('title'));
 
     R.forEachObjIndexed( (tracks, year) => {

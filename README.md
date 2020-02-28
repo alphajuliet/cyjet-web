@@ -4,6 +4,11 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.13 (2020-02-29)
+
+* Add highlighting to tracks with rating >= 1.
+* Add contact email address to web page footer.
+
 v0.1.12 (2019-04-27)
 
 * Add Creative Commons licence to main page.

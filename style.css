@@ -115,15 +115,20 @@ a {
   font-family: Catamaran, Avenir, Helvetica, Arial, sans-serif;
   font-size: 100%;
   color: #9ef;
-  border-radius: 2pt;
+  border-radius: 6pt;
   text-decoration: none;
   display: inline;
   padding: 0pt 4pt;
+  margin-left: 1pt;
   cursor: pointer;
 }
 
 .track-title:nth-child(even) {
   color: #9cf; 
+}
+
+.star {
+  background-color: #6666aa;
 }
 
 .track-title:hover {
@@ -139,7 +144,7 @@ a {
 
 /* ---------------- */
 .footer {
-  color: #666;
+  color: #777;
   font-size: 90%;
   margin: 4pt 10pt;
 }
