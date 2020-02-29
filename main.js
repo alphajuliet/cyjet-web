@@ -14,6 +14,14 @@ jQuery.fn.extend({
   }
 });
 
+// Convert secs to a min/sec string
+// sec_to_min_sec :: Integer -> String
+const sec_to_min_sec = (seconds) => {
+  const m = Math.floor(seconds / 60)
+  const s = ('00' + Math.floor(seconds % 60)).slice(-2)
+  return `${m}m${s}s`
+}
+
 //-------------------
 const Cyjet = (() => {
     
@@ -175,27 +183,40 @@ const Cyjet = (() => {
   
   const renderTrack = R.curry((target, track) => {
     const class_rating = track.rating >= 1 ? "star" : ""
+    const title = `Original artist: ${ track.artist }\n${ track.bpm } bpm\n${ sec_to_min_sec(track.length) }`
     return $(target).append_(
-      $(`<span class="track-title ${class_rating}" title="Original artist: ${ track.artist }">${ track.title }</span>`)
+      $(`<span class="track-title ${class_rating}" title="${title}">${ track.title }</span>`)
         .click(() => playTrack(track)));
   });
+
+  // -------------------
+  // Render each year to the target
+  // renderTrack :: jQuery -> [Object] -> String -> jQuery
+
+  const renderYear = R.curry((target, tracks, year) => {
+
+    // Empty containers
+    const container1 = $(`<div class="box"><span class="box-title">${ year }</span></div>`);
+    const container2 = $(`<div class="box-tracks"></div>`);
+
+    const t = R.reduce(renderTrack, container2, tracks);
+    return $(target).append_(
+      container1.append_(
+        container2.append_(t)));
+  })
 
   // Render all tracks by a nominated key. Also a reducing function.
   // renderByYear :: jQuery -> Object -> jQuery
   
   const renderByPropTo = R.curry((target, corpus) => {
+
     const groupByYear = R.groupBy(R.prop('year'));
     const sortByTitle = R.sortBy(R.prop('title'));
-
-    R.forEachObjIndexed( (tracks, year) => {
-      const container1 = $(`<div class="box"><span class="box-title">${ year }</span></div>`);
-      const container2 = $(`<div class="box-tracks"></div>`);
-
-      R.reduce(renderTrack, container2, tracks); // ooh! FP lightblub moment.
-
-      $(container1).append(container2);
-      $(target).append(container1);
-    }, (R.compose(groupByYear, sortByTitle, R.filter(isPublicTrack)))(corpus));
+    const tracks_by_year = (R.compose(groupByYear, sortByTitle, R.filter(isPublicTrack)));
+  
+    R.forEachObjIndexed( 
+      (tracks, year) => renderYear(target, tracks, year), 
+      tracks_by_year(corpus));
     return target;
   });
   
