@@ -195,14 +195,11 @@ const Cyjet = (() => {
 
   const renderYear = R.curry((target, tracks, year) => {
 
-    // Empty containers
-    const container1 = $(`<div class="box"><span class="box-title">${ year }</span></div>`);
-    const container2 = $(`<div class="box-tracks"></div>`);
+    const container1 = $(`<div class="box-tracks"></div>`)
+    const t = R.reduce(renderTrack, container1, tracks)
 
-    const t = R.reduce(renderTrack, container2, tracks);
-    return $(target).append_(
-      container1.append_(
-        container2.append_(t)));
+    const container2 = $(`<div class="box"><span class="box-title">${ year }</span></div>`)
+    return $(target).append_(container2.append_(t))
   })
 
   // Render all tracks by a nominated key. Also a reducing function.
@@ -214,10 +211,9 @@ const Cyjet = (() => {
     const sortByTitle = R.sortBy(R.prop('title'));
     const tracks_by_year = (R.compose(groupByYear, sortByTitle, R.filter(isPublicTrack)));
   
-    R.forEachObjIndexed( 
-      (tracks, year) => renderYear(target, tracks, year), 
-      tracks_by_year(corpus));
-    return target;
+    return R.forEachObjIndexed( 
+      (tracks, year) => renderYear(target, tracks, year),
+      tracks_by_year(corpus))
   });
   
   // -------------------
@@ -237,9 +233,15 @@ const Cyjet = (() => {
         $('#shuffle').toggleClass("buttonOn");
       });
 
+    const buttonStarred = $('<button id="starred">best of</button>')
+      .click(() => {
+        $('.track-title').not('.star').toggle()
+      });
+
     return $(target)
       .append_(container)
-      .append_(buttonShuffle);
+      .append_(buttonShuffle)
+      .append_(buttonStarred)
   }
   
   // -------------------
