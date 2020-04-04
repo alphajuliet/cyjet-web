@@ -3,7 +3,7 @@
  */
 
 :root {
-  --main-bg-colour: #444;
+  --main-bg-colour: #eeeeee;
   --text-colour: #7bf;
   --alt-text-colour: #f99;
 }
@@ -15,7 +15,7 @@ body {
   max-width: 900px;
   font-family: Catamaran, Avenir, Roboto, Helvetica, Arial, sans-serif;
   font-size: 12pt;
-  background-color: #445;
+  background-color: #ffffff;
   /* background-image: linear-gradient(to right, #222, #000); */
   color: #eeeeee;
 }
@@ -26,28 +26,12 @@ body {
 }
 
 .header .title {
-  font-family: "Unica One";
+  font-family: Fredericka the Great, Catamaran, Avenir, Arial, sans-serif;
   font-weight: lighter;
   font-size: 100pt;
   letter-spacing: 8pt;
-  color: #7bf;
-  text-shadow: 5px 5px 5px #111;
-}
-
-#cy {
-  /* padding-right: 2pt; */
-}
-
-#jet {
-  /* background-color: #7bf; */
-  /* color: #222; */
-  /* background-image: linear-gradient(to right, #7bf, #59d); */
-  /* border-radius: 8pt; */
-  /* padding-top: 0pt; */
-  /* padding-left: 0pt; */
-  /* padding-right: 12pt; */
-  /* text-shadow: none; */
-  /* box-shadow: 5px 5px 5px #111; */
+  color: #aaaaaa;
+  /* text-shadow: 5px 5px 5px #999999; */
 }
 
 #logo {
@@ -69,7 +53,7 @@ a {
 
 #message {
   font-size: 90%; 
-  color: #c9c;
+  color: #666666;
   margin: 5pt 0 10pt 3pt;
 }
 
@@ -81,21 +65,22 @@ a {
 .box {
   display: flex;
   justify-content: flex-start;
-  background-color: #668;
+  background-color: #ffffff;
   /* background-image: linear-gradient(to right, #647, #314); */
+  border: 1px dashed #999999;
   border-radius: 4pt;
   margin: 15pt 0pt;
   padding: 5pt 5pt;
 }
 
 .box:hover {
-  background-color: #669; 
+  background-color: #eeeeee; 
   transition: all;
   transition-duration: 1s;
 }
 
 .box-title {
-  font-family: Unica One, Helvetica, sans-serif;
+  font-family: Unica One, Catamaran, Avenir, Helvetica, sans-serif;
   font-size: 150%;  
   font-weight: bold;
   color: #f66;
@@ -112,10 +97,10 @@ a {
 
 /* Track styling */
 .track-title {
-  font-family: Catamaran, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Catamaran, Avenir, Roboto, Arial, sans-serif;
   font-size: 100%;
-  color: #9ef;
-  border-radius: 6pt;
+  color: #333333;
+  border-radius: 4pt;
   text-decoration: none;
   display: inline;
   padding: 0pt 4pt;
@@ -124,11 +109,11 @@ a {
 }
 
 .track-title:nth-child(even) {
-  color: #9cf; 
+  color: #777777; 
 }
 
 .star {
-  background-color: #6666aa;
+  background-color: #ffeeee;
 }
 
 .track-title:hover {
@@ -140,6 +125,8 @@ a {
 #trackPlayer {
   max-width: 500px;
   margin: 20pt 0pt 0pt 0pt; 
+  border: 1px dashed #999999;
+  border-radius: 4pt;
 }
 
 /* ---------------- */
@@ -151,15 +138,16 @@ a {
 
 /* ---------------- */
 .plyr {
+  background-color: #cccccc;
   border-radius: 10pt;
-  box-shadow: 5px 5px 5px #000;
+  /* box-shadow: 5px 5px 5px #999999; */
 }
 
 button {
-  border: 1px solid #666666;
+  border: 1px dashed #cccccc;
   border-radius: 8pt;
-  color: #8cf;
-  background-color: #667;
+  color: #666666;
+  background-color: #eeeeee;
   font-size: 90%;
   padding: 2pt 12pt;
   margin-right: 8pt;
