@@ -4,6 +4,10 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.14 (2020-04-04)
+
+* Changed colours, borders, and fonts.
+
 v0.1.13 (2020-02-29)
 
 * Add highlighting to tracks with rating >= 1.
