@@ -17,9 +17,9 @@ jQuery.fn.extend({
 // Convert secs to a min/sec string
 // sec_to_min_sec :: Integer -> String
 const sec_to_min_sec = (seconds) => {
-  const m = Math.floor(seconds / 60)
-  const s = ('00' + Math.floor(seconds % 60)).slice(-2)
-  return `${m}m${s}s`
+  const m = Math.floor(seconds / 60);
+  const s = ('00' + Math.floor(seconds % 60)).slice(-2);
+  return `${m}m${s}s`;
 }
 
 //-------------------
@@ -28,8 +28,8 @@ const Cyjet = (() => {
   const Info = {
     title: "cyjet",
     author: "AndrewJ",
-    version: "0.1.14",
-    date: "2020-04-04",
+    version: "0.1.15",
+    date: "2020-10-18",
     info: "Cyjet music site",
     appendTitleTo: (tagName) => {
       $(tagName).append($(`<span class="title"><span id="cy">(cy</span><span id="jet">jet)</span></span>`));
@@ -62,11 +62,8 @@ const Cyjet = (() => {
   // Use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to retrieve.
   
   const withTrackDataDo = (fn) => {
-    const trackData = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet/tracks.json'
-    // const trackData = 'https://api.airtable.com/v0/appHZHDQXtw3tTsoh/Tracks'
-    fetch(trackData, { 
-      "mode": "cors", 
-    })
+    const trackData = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet/tracks.json';
+    fetch(trackData, {"mode": "cors"})
       .then(response => response.json())
       .catch(err => console.error(err.message)) 
       .then(json => { fn(json); })
@@ -85,8 +82,8 @@ const Cyjet = (() => {
       eventCategory: 'Music',
       eventAction: 'play',
       eventLabel: track.title
-    })
-    console.log(`Event: play ${track.title}`)
+    });
+    console.log(`Event: play ${track.title}`);
   }
   
   const logShuffle = (ev) => {
@@ -95,8 +92,8 @@ const Cyjet = (() => {
       eventCategory: 'Music',
       eventAction: 'shuffle',
       eventLabel: ev
-    })
-    console.log(`Event: shuffle ${ev}`)
+    });
+    console.log(`Event: shuffle ${ev}`);
   }
 
   //-------------------
@@ -106,14 +103,14 @@ const Cyjet = (() => {
 
     // Resolve the location of the track
     const resolveTrackInfo = (track) => {
-      let t = R.clone(track)
-      const baseUri = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet'
-      t.uri = `${ baseUri }/${ t.year }/${ t.mp3_fname }`
-      return t
+      let t = R.clone(track);
+      const baseUri = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet';
+      t.uri = `${ baseUri }/${ t.year }/${ t.mp3_fname }`;
+      return t;
     }
     
     if (player.playing == true || player.paused == true) {
-      player.stop()
+      player.stop();
     }
 
     // Load a new source
@@ -132,12 +129,12 @@ const Cyjet = (() => {
     player.play()
       .then(() => {
         player.muted = false;
-        message(`${ track.title } by ${ track.artist }`)
-        logPlay(track)
+        message(`${ track.title } by ${ track.artist }`);
+        logPlay(track);
       })
       .catch(err => {
-        message(`error :: cannot play ${ track.title } → ${err}`)
-        console.log(`Error playing ${ track.title } → ${err}`)
+        message(`error :: cannot play ${ track.title } → ${err}`);
+        console.log(`Error playing ${ track.title } → ${err}`);
       });
   }
   
@@ -182,8 +179,8 @@ const Cyjet = (() => {
   // renderTrack :: jQuery -> Object -> jQuery
   
   const renderTrack = R.curry((target, track) => {
-    const class_rating = track.rating >= 1 ? "star" : ""
-    const title = `Original artist: ${ track.artist }\n${ track.bpm } bpm\n${ sec_to_min_sec(track.length) }`
+   const class_rating = track.rating >= 1 ? "star" : "";
+    const title = `Original artist: ${ track.artist }\n${ track.bpm } bpm\n${ sec_to_min_sec(track.length) }`;
     return $(target).append_(
       $(`<span class="track-title ${class_rating}" title="${title}">${ track.title }</span>`)
         .click(() => playTrack(track)));
@@ -195,25 +192,31 @@ const Cyjet = (() => {
 
   const renderYear = R.curry((target, tracks, year) => {
 
-    const container1 = $(`<div class="box-tracks"></div>`)
-    const t = R.reduce(renderTrack, container1, tracks)
+    const container1 = $(`<div class="box-tracks"></div>`);
+    const t = R.reduce(renderTrack, container1, tracks);
 
-    const container2 = $(`<div class="box"><span class="box-title">${ year }</span></div>`)
-    return $(target).append_(container2.append_(t))
+    const container2 = $(`<div class="box"><span class="box-title">${ year }</span></div>`);
+    return $(target).append_(container2.append_(t));
   })
 
   // Render all tracks by a nominated key. Also a reducing function.
-  // renderByYear :: jQuery -> Object -> jQuery
+  // renderByPropTo :: jQuery -> Object -> jQuery
   
   const renderByPropTo = R.curry((target, corpus) => {
 
     const groupByYear = R.groupBy(R.prop('year'));
     const sortByTitle = R.sortBy(R.prop('title'));
     const tracks_by_year = (R.compose(groupByYear, sortByTitle, R.filter(isPublicTrack)));
-  
-    return R.forEachObjIndexed( 
-      (tracks, year) => renderYear(target, tracks, year),
-      tracks_by_year(corpus))
+    const m = tracks_by_year(corpus);
+
+    // Show tracks in reverse year order
+    return R.forEach(
+      year => renderYear(target, R.prop(year, m), year),
+      R.reverse(R.keys(m)));
+
+    // return R.forEachObjIndexed( 
+    //   (tracks, year) => renderYear(target, tracks, year),
+    //   tracks_by_year(corpus))
   });
   
   // -------------------
@@ -239,9 +242,7 @@ const Cyjet = (() => {
       });
 
     return $(target)
-      .append_(container)
-      .append_(buttonShuffle)
-      .append_(buttonStarred)
+      .append_(container);
   }
   
   // -------------------
