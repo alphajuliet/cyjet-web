@@ -4,6 +4,10 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.16 (2020-12-18)
+
+* Re-enable the missing shuffle and best-of buttons.
+
 v0.1.15 (2020-10-18)
 
 * Change the year order to most recent first.
