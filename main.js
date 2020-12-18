@@ -233,14 +233,16 @@ const Cyjet = (() => {
     const buttonShuffle = $('<button id="shuffle">shuffle play</button>')
       .click(() => {
         shufflePlay();
-        $('#shuffle').toggleClass("buttonOn");
+        $('#shuffle').toggleClass('buttonOn');
       });
 
     const buttonStarred = $('<button id="starred">best of</button>')
       .click(() => {
-        $('.track-title').not('.star').toggle()
+        $('.track-title').not('.star').toggle();
+        $('#starred').toggleClass('buttonOn');
       });
 
+      container.append_(buttonShuffle).append_(buttonStarred)
     return $(target)
       .append_(container);
   }
