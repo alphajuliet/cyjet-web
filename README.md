@@ -4,6 +4,11 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.17 (2020-12-19)
+
+* Fix audio player issues on iOS.
+* Minor code refactoring and cleanup.
+
 v0.1.16 (2020-12-18)
 
 * Re-enable the missing shuffle and best-of buttons.

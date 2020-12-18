@@ -1,12 +1,20 @@
 // main.js
-// created by Andrew 2018-05-06 
+// AndrewJ, created 2018-05-06
+//-------------------
 
-var R, audiojs, Plyr, ga;  // Prevent syntax warnings from missing definitions
+// Declare to prevent warnings when using these pre-defined prefixes
+var R, audiojs, Plyr, ga;
+
+// Global pointer to the audio player
 var player;
 
-//-------------------
-// Make a chainable append
+// Global state
+var randomPlay = false;
 
+//-------------------
+// Utilities
+
+// Make a chainable append
 jQuery.fn.extend({
   append_: function (item) {
     this.append(item);
@@ -19,17 +27,19 @@ jQuery.fn.extend({
 const sec_to_min_sec = (seconds) => {
   const m = Math.floor(seconds / 60);
   const s = ('00' + Math.floor(seconds % 60)).slice(-2);
-  return `${m}m${s}s`;
-}
+  return `${m}:${s}`;
+};
 
 //-------------------
+// Main namespace
+
 const Cyjet = (() => {
-    
+
   const Info = {
     title: "cyjet",
     author: "AndrewJ",
-    version: "0.1.16",
-    date: "2020-12-18",
+    version: "0.1.17",
+    date: "2020-12-19",
     info: "Cyjet music site",
     appendTitleTo: (tagName) => {
       $(tagName).append($(`<span class="title"><span id="cy">(cy</span><span id="jet">jet)</span></span>`));
@@ -41,41 +51,26 @@ const Cyjet = (() => {
     }
   };
 
-  const message = txt => {
-    $('#message').html(txt); 
-  }
-
-  //-------------------
-  // Render the audio player
-
-  const renderPlayerTo = (target) => {
-    $(target).append($('<audio id="player"></audio>'));
-    player = new Plyr('#player', { 'autoplay': false, 'muted': true });
-    player.on('ended', event => {
-      message('click on a track to play');
-    });
-    message('click on a track to play');
+  // Status message
+  const setStatusMessage = txt => {
+    $('#message').html(txt);
   };
 
   //-------------------
   // Get track data and apply a function to it
-  // Use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to retrieve.
-  
+
   const withTrackDataDo = (fn) => {
     const trackData = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet/tracks.json';
     fetch(trackData, {"mode": "cors"})
       .then(response => response.json())
       .catch(err => console.error(err.message)) 
       .then(json => { fn(json); })
-      .catch(err => console.error(err.message)) 
-  }
-
-  //-------------------
-  const isPublicTrack = (t) => (t.public == 'checked') || (t.public == true);
+      .catch(err => console.error(err.message)) ;
+  };
 
   //-------------------
   // Collect analytics
-  
+
   const logPlay = (track) => {
     ga('send', {
       hitType: 'event',
@@ -84,8 +79,8 @@ const Cyjet = (() => {
       eventLabel: track.title
     });
     console.log(`Event: play ${track.title}`);
-  }
-  
+  };
+
   const logShuffle = (ev) => {
     ga('send', {
       hitType: 'event',
@@ -94,53 +89,50 @@ const Cyjet = (() => {
       eventLabel: ev
     });
     console.log(`Event: shuffle ${ev}`);
-  }
+  };
+
+  // ====================================================
+  // Audio functions
 
   //-------------------
   // Play a track through the player
-  
-  const playTrack = (t) => {
 
-    // Resolve the location of the track
-    const resolveTrackInfo = (track) => {
-      let t = R.clone(track);
-      const baseUri = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet';
-      t.uri = `${ baseUri }/${ t.year }/${ t.mp3_fname }`;
-      return t;
-    }
-    
+  const playTrack = (track) => {
+
     if (player.playing == true || player.paused == true) {
       player.stop();
     }
 
     // Load a new source
-    const track = resolveTrackInfo(t);
-    message("loading track...");
+    setStatusMessage("loading track...");
     player.source = {
       type: 'audio',
       title: track.title,
       sources: [{
-        src: track.uri,
+        src: track.link,
         type: 'audio/mp3',
       }],
-    }
-    
-    player.muted = true; // kinda get around the Webkit autoplay issue
+    };
+
+    // Play it
     player.play()
       .then(() => {
         player.muted = false;
-        message(`${ track.title } by ${ track.artist }`);
+        setStatusMessage(`${ track.title } by ${ track.artist }`);
         logPlay(track);
       })
       .catch(err => {
-        message(`error :: cannot play ${ track.title } → ${err}`);
+        setStatusMessage(`error :: cannot play ${ track.title } → ${err}`);
         console.log(`Error playing ${ track.title } → ${err}`);
       });
-  }
-  
+  };
+
+  //-------------------
+  const isPublicTrack = (t) => (t.public == 'checked') || (t.public == true);
+
   // -------------------
   // Play a random track
-  
+
   const playRandomTrack = () => {
     const randomNumber = (n) => Math.floor(Math.random() * n);
     const randomElement = (lst) => R.nth(randomNumber(R.length(lst)), lst);
@@ -153,10 +145,9 @@ const Cyjet = (() => {
   // -------------------
   // Shuffle play until stopped
 
-  var randomPlay = false; // state
-
   const shufflePlay = () => {
-    randomPlay = (randomPlay == true) ? false : true;
+
+    randomPlay = !randomPlay;
 
     if (randomPlay == true) {
       logShuffle('start');
@@ -166,20 +157,24 @@ const Cyjet = (() => {
     else {
       logShuffle('stop');
       player.on('ended', event => {
-        message('click on a track to play');
+        setStatusMessage('click on a track to play');
       });
       player.stop();
-      message('click on a track to play');
+      setStatusMessage('click on a track to play');
     }
   };
 
+  // ====================================================
+  // Rendering functions
+
   // -------------------
   // Render each track to the target
-  // This is a reducing function! (target → track → target)
+  // This is a reducing function: target → track → target
   // renderTrack :: jQuery -> Object -> jQuery
-  
+
   const renderTrack = R.curry((target, track) => {
-   const class_rating = track.rating >= 1 ? "star" : "";
+
+    const class_rating = track.rating >= 1 ? "star" : "";
     const title = `Original artist: ${ track.artist }\n${ track.bpm } bpm\n${ sec_to_min_sec(track.length) }`;
     return $(target).append_(
       $(`<span class="track-title ${class_rating}" title="${title}">${ track.title }</span>`)
@@ -192,41 +187,44 @@ const Cyjet = (() => {
 
   const renderYear = R.curry((target, tracks, year) => {
 
+    // Create a box of rendered tracks
     const container1 = $(`<div class="box-tracks"></div>`);
-    const t = R.reduce(renderTrack, container1, tracks);
+    const tr = R.reduce(renderTrack, container1, tracks);
 
+    // Create a year and add the rendered tracks
     const container2 = $(`<div class="box"><span class="box-title">${ year }</span></div>`);
-    return $(target).append_(container2.append_(t));
-  })
+    return $(target).append_(container2.append_(tr));
+  });
 
-  // Render all tracks by a nominated key. Also a reducing function.
+  // -------------------
+  // Render all public tracks by a nominated key. Also a reducing function.
   // renderByPropTo :: jQuery -> Object -> jQuery
-  
+
   const renderByPropTo = R.curry((target, corpus) => {
 
+    // Pipeline
     const groupByYear = R.groupBy(R.prop('year'));
     const sortByTitle = R.sortBy(R.prop('title'));
-    const tracks_by_year = (R.compose(groupByYear, sortByTitle, R.filter(isPublicTrack)));
-    const m = tracks_by_year(corpus);
+    const filterPublic = R.filter(isPublicTrack);
+    const targetTracks = (R.compose(groupByYear,
+                                    sortByTitle,
+                                    filterPublic));
 
-    // Show tracks in reverse year order
+    // Show tracks in descending year order, sorted by ascending name
+    const tr = targetTracks(corpus);
     return R.forEach(
-      year => renderYear(target, R.prop(year, m), year),
-      R.reverse(R.keys(m)));
-
-    // return R.forEachObjIndexed( 
-    //   (tracks, year) => renderYear(target, tracks, year),
-    //   tracks_by_year(corpus))
+      year => renderYear(target, R.prop(year, tr), year),
+      R.reverse(R.keys(tr)));
   });
-  
-  // -------------------
-  // List all the tracks to a target
-  
+
+  //-------------------
+  // Render all the tracks to a target
+
   const renderCorpusTo = R.compose(withTrackDataDo, renderByPropTo);
-        
+
   // -------------------
   // Render the playlist controls
-  
+
   const renderControlsTo = (target) => {
     const container = $(target).append($('<div id="controls"></div>'));
 
@@ -242,28 +240,42 @@ const Cyjet = (() => {
         $('#starred').toggleClass('buttonOn');
       });
 
-      container.append_(buttonShuffle).append_(buttonStarred)
+    container.append(buttonShuffle);
+    container.append(buttonStarred);
     return $(target)
       .append_(container);
-  }
-  
+  };
+
+  // -------------------
+  // Render the global audio player
+
+  const renderPlayerTo = (target) => {
+    $(target).append($('<audio id="player"></audio>'));
+    player = new Plyr('#player', { 'autoplay': false, 'muted': true });
+    player.on('ended', event => {
+      setStatusMessage('click on a track to play');
+    });
+    setStatusMessage('click on a track to play');
+  };
+
   // -------------------
   // Initialise the page with content
-  
+
   const initialise = () => {
     Info.appendTitleTo(".header");
     Info.appendVersionDateTo("#attribution");
+
     renderPlayerTo("#trackPlayer");
     renderCorpusTo("#trackList");
     renderControlsTo("#controls");
     console.log("Initialised.");
   };
-  
+
   // Public data
   return Object.freeze({
     initialise: initialise
   });
-  
+
 })();
 
 // The End
