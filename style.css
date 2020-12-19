@@ -14,9 +14,9 @@ body {
   max-width: 800px;
   font-family: Catamaran, Avenir, Roboto, Helvetica, Arial, sans-serif;
   font-size: 12pt;
-  background-color: #ffffff;
-  background:url(images/wimmera-lowq.jpg) top center no-repeat;
-  background-size: auto 120%;
+  background-color: #333;
+  background: url(images/wimmera-lowq.jpg) top center no-repeat;
+  background-size: cover;
   background-attachment:fixed;
   color: #eeeeee;
 }
@@ -29,9 +29,13 @@ body {
 .header .title {
   font-family: Catamaran, Avenir, Arial, sans-serif;
   font-weight: lighter;
-  font-size: 80pt;
+  font-size: 72pt;
   letter-spacing: 8pt;
   color: #333333;
+  padding: 0pt 0;
+  border-style: solid;
+  border-width: 1pt 0 1pt 0;
+  border-color: #999;
 }
 
 #logo {
@@ -60,7 +64,7 @@ a {
   padding: 0 5pt;
   border-radius: 6pt;
   /* width: 60%; */
-  max-width: 450px;
+  max-width: 460px;
 }
 
 #trackList {
@@ -145,6 +149,13 @@ a {
   margin: 0pt 10pt;
   padding: 5pt 5pt;
   border-radius: 8px;
+}
+
+.footer:hover {
+  background-color: #fff8ee; 
+  opacity: 0.9;
+  transition: all;
+  transition-duration: 1s;
 }
 
 a {
