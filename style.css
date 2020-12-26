@@ -9,30 +9,35 @@
 }
 
 body {
+  font-family: Catamaran, Avenir, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12pt;
   margin-left: auto;
   margin-right: auto;
   max-width: 800px;
-  font-family: Catamaran, Avenir, Roboto, Helvetica, Arial, sans-serif;
-  font-size: 12pt;
-  background-color: #333;
+
+  color: #eeeeee;
+  /* background: linear-gradient(to top, #334 0%, #667 100%); */
+  /* background-color: #766; */
   background: url(images/wimmera-lowq.jpg) top center no-repeat;
   background-size: cover;
-  background-attachment:fixed;
-  color: #eeeeee;
+  background-attachment: fixed;
 }
+
+#container {}
 
 /* ---------------- */
 .header {
-  margin: 50px 10pt;
+  padding: 50px 10pt;
 }
 
 .header .title {
   font-family: Catamaran, Avenir, Arial, sans-serif;
   font-weight: lighter;
-  font-size: 72pt;
+  /* font-size: 72pt; */
+  font-size: 400%;
   letter-spacing: 8pt;
   color: #333333;
-  padding: 0pt 0;
+  padding: 0;
   border-style: solid;
   border-width: 1pt 0 1pt 0;
   border-color: #999;
@@ -46,9 +51,15 @@ body {
 }
 
 /* ---------------- */
+.ui {
+  margin: 0pt 10pt 10pt 10pt;
+}
+
 .content {
-  display: block;
-  margin: 0pt 10pt;
+  margin: 10pt 10pt;
+  height: 300pt;
+  overflow: auto;
+  border-radius: 8pt;
 }
 
 a {
@@ -68,8 +79,8 @@ a {
 }
 
 #trackList {
-  margin: 15pt 0pt;
-  padding: 6pt 0pt;
+  /* margin: 15pt 0pt; */
+  /* padding: 6pt 0pt; */
 }
 
 .box {
@@ -84,7 +95,7 @@ a {
 }
 
 .box:hover {
-  background-color: #fff8ee; 
+  background-color: #fff8dd; 
   opacity: 0.9;
   transition: all;
   transition-duration: 1s;
@@ -135,7 +146,7 @@ a {
 
 #trackPlayer {
   max-width: 500px;
-  margin: 20pt 0pt 0pt 0pt; 
+  margin: 10pt 0pt 0pt 0pt; 
   border: 1px dashed #999999;
   border-radius: 8pt;
 }
@@ -146,7 +157,7 @@ a {
   opacity: 0.7;
   color: #333;
   font-size: 90%;
-  margin: 0pt 10pt;
+  /* margin: 0pt 10pt; */
   padding: 5pt 5pt;
   border-radius: 8px;
 }
