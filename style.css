@@ -27,13 +27,12 @@ body {
 
 /* ---------------- */
 .header {
-  padding: 50px 10pt;
+  padding: 15pt 10pt;
 }
 
 .header .title {
   font-family: Catamaran, Avenir, Arial, sans-serif;
   font-weight: lighter;
-  /* font-size: 72pt; */
   font-size: 400%;
   letter-spacing: 8pt;
   color: #333333;
@@ -57,7 +56,7 @@ body {
 
 .content {
   margin: 10pt 10pt;
-  height: 300pt;
+  height: 40vh;
   overflow: auto;
   border-radius: 8pt;
 }
