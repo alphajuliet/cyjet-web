@@ -63,7 +63,7 @@ const Cyjet = (() => {
     const trackData = 'https://s3-ap-southeast-2.amazonaws.com/alphajuliet-s3-mp3/cyjet/tracks.json';
     fetch(trackData, {"mode": "cors"})
       .then(response => response.json())
-      .catch(err => console.error(err.message)) 
+      .catch(err => console.error(err.message))
       .then(json => { fn(json); })
       .catch(err => console.error(err.message)) ;
   };
@@ -118,7 +118,7 @@ const Cyjet = (() => {
     player.play()
       .then(() => {
         player.muted = false;
-        setStatusMessage(`${ track.title } by ${ track.artist }`);
+        setStatusMessage(`${ track.title } by ${ track.artist } (${ track.year })`);
         logPlay(track);
       })
       .catch(err => {
@@ -137,7 +137,7 @@ const Cyjet = (() => {
     const randomNumber = (n) => Math.floor(Math.random() * n);
     const randomElement = (lst) => R.nth(randomNumber(R.length(lst)), lst);
     const playFn = R.compose(playTrack,
-                             randomElement, 
+                             randomElement,
                              R.filter(isPublicTrack));
     withTrackDataDo(playFn);
   };
