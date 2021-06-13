@@ -38,8 +38,8 @@ const Cyjet = (() => {
   const Info = {
     title: "cyjet",
     author: "AndrewJ",
-    version: "0.1.17",
-    date: "2020-12-19",
+    version: "0.1.18",
+    date: "2021-06-14",
     info: "Cyjet music site",
     appendTitleTo: (tagName) => {
       $(tagName).append($(`<span class="title">cчjεt</span>`));

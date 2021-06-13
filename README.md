@@ -4,6 +4,10 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.18 (2021-06-14)
+
+* Add year to track status.
+
 v0.1.17 (2020-12-19)
 
 * Fix audio player issues on iOS.
