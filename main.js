@@ -38,8 +38,8 @@ const Cyjet = (() => {
   const Info = {
     title: "cyjet",
     author: "AndrewJ",
-    version: "0.1.18",
-    date: "2021-06-14",
+    version: "0.1.19",
+    date: "2021-08-13",
     info: "Cyjet music site",
     appendTitleTo: (tagName) => {
       $(tagName).append($(`<span class="title">cчjεt</span>`));
@@ -175,9 +175,10 @@ const Cyjet = (() => {
   const renderTrack = R.curry((target, track) => {
 
     const class_rating = track.rating >= 1 ? "star" : "";
+    const class_remix = track.type == "Remix" ? "remix" : "";
     const title = `Original artist: ${ track.artist }\n${ track.bpm } bpm\n${ sec_to_min_sec(track.length) }`;
     return $(target).append_(
-      $(`<span class="track-title ${class_rating}" title="${title}">${ track.title }</span>`)
+      $(`<span class="track-title ${class_rating} ${class_remix}" title="${title}">${ track.title }</span>`)
         .click(() => playTrack(track)));
   });
 
@@ -228,20 +229,29 @@ const Cyjet = (() => {
   const renderControlsTo = (target) => {
     const container = $(target).append($('<div id="controls"></div>'));
 
-    const buttonShuffle = $('<button id="shuffle">shuffle play</button>')
+    const buttonShuffle = $('<button id="btnShuffle">shuffle play</button>')
       .click(() => {
         shufflePlay();
-        $('#shuffle').toggleClass('buttonOn');
+        $('#btnShuffle').toggleClass('buttonOn');
       });
 
-    const buttonStarred = $('<button id="starred">best of</button>')
+    const buttonStarred = $('<button id="btnStarred">best of</button>')
       .click(() => {
+        $('#btnRemixes').toggle();
         $('.track-title').not('.star').toggle();
-        $('#starred').toggleClass('buttonOn');
+        $('#btnStarred').toggleClass('buttonOn');
+      });
+
+    const buttonRemixes = $('<button id="btnRemixes">remixes</button>')
+      .click(() => {
+        $('#btnStarred').toggle();
+        $('.track-title').not('.remix').toggle();
+        $('#btnRemixes').toggleClass('buttonOn');
       });
 
     container.append(buttonShuffle);
     container.append(buttonStarred);
+    container.append(buttonRemixes);
     return $(target)
       .append_(container);
   };
