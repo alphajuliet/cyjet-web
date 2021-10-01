@@ -72,8 +72,7 @@ const Cyjet = (() => {
   // Collect analytics
 
   const logPlay = (track) => {
-    ga('send', {
-      hitType: 'event',
+    gtag('event', {
       eventCategory: 'Music',
       eventAction: 'play',
       eventLabel: track.title
@@ -82,8 +81,7 @@ const Cyjet = (() => {
   };
 
   const logShuffle = (ev) => {
-    ga('send', {
-      hitType: 'event',
+    gtag('event', {
       eventCategory: 'Music',
       eventAction: 'shuffle',
       eventLabel: ev
