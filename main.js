@@ -72,19 +72,15 @@ const Cyjet = (() => {
   // Collect analytics
 
   const logPlay = (track) => {
-    gtag('event', {
-      eventCategory: 'Music',
-      eventAction: 'play',
-      eventLabel: track.title
+    gtag('event', 'play', {
+      title: track.title
     });
     console.log(`Event: play ${track.title}`);
   };
 
   const logShuffle = (ev) => {
-    gtag('event', {
-      eventCategory: 'Music',
-      eventAction: 'shuffle',
-      eventLabel: ev
+    gtag('event', 'shuffle', {
+      action: ev
     });
     console.log(`Event: shuffle ${ev}`);
   };
