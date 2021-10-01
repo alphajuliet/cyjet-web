@@ -4,6 +4,10 @@ Music mini-site. Hand-made from simple materials, including jQuery, with a light
 
 ## Versions
 
+v0.1.20 (2021-10-02)
+
+* Update analytics to GA4.
+
 v0.1.19 (2021-08-13)
 
 * Add remix button toggle.
